@@ -29,7 +29,7 @@ public class CelularPosPagoController {
     public void atualizarPosPago(@PathVariable long numero, @RequestBody CelularPosPago celularPosPago){
         CelularPosPago celularF = (CelularPosPago) this.operadora.getCelulares().stream().filter(celular -> celular.getNumero() == numero).findFirst().get();
         celularF.setCliente(celularPosPago.getCliente());
-        celularF.setPlano(celularPosPago.getPlano());
+        //celularF.setPlano(celularPosPago.getPlano());
         celularF.setDiaDeVencimento(celularPosPago.getDiaDeVencimento());
     }
 

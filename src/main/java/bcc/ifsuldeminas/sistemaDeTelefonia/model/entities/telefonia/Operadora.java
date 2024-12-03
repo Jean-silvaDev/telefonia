@@ -3,7 +3,6 @@ package bcc.ifsuldeminas.sistemaDeTelefonia.model.entities.telefonia;
 import bcc.ifsuldeminas.sistemaDeTelefonia.model.entities.telefonia.comercial.*;
 import bcc.ifsuldeminas.sistemaDeTelefonia.model.entities.telefonia.pessoal.Cliente;
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 

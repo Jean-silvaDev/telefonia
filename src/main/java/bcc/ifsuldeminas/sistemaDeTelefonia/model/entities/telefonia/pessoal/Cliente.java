@@ -14,6 +14,8 @@ public class Cliente{
     private Long id;
     private String nome;
     private String endereco;
+    @ManyToOne
+    @JoinColumn(name = "plano_id")
     private Plano plano;
 
     public Cliente(){}

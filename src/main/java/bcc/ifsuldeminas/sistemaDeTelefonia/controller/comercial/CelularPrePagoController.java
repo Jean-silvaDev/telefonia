@@ -29,7 +29,7 @@ public class CelularPrePagoController {
     public void atualizarPrePago(@PathVariable long numero, @RequestBody CelularPrePago celularPrePago){
         CelularPrePago celularF = (CelularPrePago) this.operadora.getCelulares().stream().filter(celular -> celular.getNumero() == numero).findFirst().get();
         celularF.setCliente(celularPrePago.getCliente());
-        celularF.setPlano(celularPrePago.getPlano());
+        //celularF.setPlano(celularPrePago.getPlano());
         celularF.setDataDeValidade(celularPrePago.getDataDeValidade());
     }
 

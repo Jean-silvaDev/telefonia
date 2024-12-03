@@ -1,7 +1,5 @@
 package bcc.ifsuldeminas.sistemaDeTelefonia.model.entities.telefonia.comercial;
 
-//Nome: Jean Francisco Da Silva
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +11,7 @@ public class Plano {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nome;
+    private float valorPorMinuto;
 
     public Long getId() {
         return id;
@@ -21,10 +20,6 @@ public class Plano {
     public void setId(Long id) {
         this.id = id;
     }
-
-    private float valorPorMinuto;
-
-    public Plano() {}
 
     public String getNome() {
         return nome;
