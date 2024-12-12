@@ -2,6 +2,11 @@ package bcc.ifsuldeminas.sistemaDeTelefonia.controller.comercial;
 
 import bcc.ifsuldeminas.sistemaDeTelefonia.model.entities.repositories.comercial.PlanoRepository;
 import bcc.ifsuldeminas.sistemaDeTelefonia.model.entities.telefonia.comercial.Plano;
+import bcc.ifsuldeminas.sistemaDeTelefonia.model.services.PlanoNotFoundException;
+import bcc.ifsuldeminas.sistemaDeTelefonia.model.services.PlanoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,49 +17,50 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/plano")
 public class PlanoController {
-    PlanoRepository planoRepository;
+    PlanoService planoService;
 
-    public PlanoController(PlanoRepository planoRepository){
-        this.planoRepository = planoRepository;
+    public PlanoController(PlanoService planoService){
+        this.planoService = planoService;
     }
 
     @GetMapping
-    public List<Plano> listarPlanos(){
-        return this.planoRepository.findAll();
+    public ResponseEntity listarPlanos(){
+        return new ResponseEntity(this.planoService.read(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public Plano listarPlano(@PathVariable Long id){
-        Optional opt = this.planoRepository.findById(id);
-        if(opt.isPresent()){
-            return (Plano)opt.get();
-        } else {
-            return null;
+    public ResponseEntity listarPlano(@PathVariable Long id){
+        try{
+            Plano plano = this.planoService.read(id);
+            return new ResponseEntity(plano, HttpStatus.OK);
+        } catch (PlanoNotFoundException pnfe){
+            return new ResponseEntity(pnfe.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public Plano criarPlano(@RequestBody Plano plano){
-        this.planoRepository.save(plano);
-        return plano;
+    public ResponseEntity criarPlano(@RequestBody Plano plano){
+        this.planoService.create(plano);
+        return new ResponseEntity(plano, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public Plano atualizar(@PathVariable Long id, @RequestBody Plano plano){
-        Optional opt = this.planoRepository.findById(id);
-        if(opt.isPresent()){
-            Plano planoOriginal = (Plano) opt.get();
-            planoOriginal.setNome(plano.getNome());
-            planoOriginal.setValorPorMinuto(plano.getValorPorMinuto());
-            this.planoRepository.save(planoOriginal);
-            return (Plano)opt.get();
-        } else {
-            return null;
+    public ResponseEntity atualizar(@PathVariable Long id, @RequestBody Plano plano){
+        try{
+            Plano planoAntigo = this.planoService.update(id, plano);
+            return new ResponseEntity(planoAntigo, HttpStatus.OK);
+        } catch (PlanoNotFoundException pnfe){
+            return new ResponseEntity(pnfe.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("{id}")
-    public void deletarPlano(@PathVariable Long id){
-        this.planoRepository.deleteById(id);
+    public ResponseEntity deletarPlano(@PathVariable Long id){
+        try{
+            this.planoService.delete(id);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }catch (PlanoNotFoundException pnfe){
+            return new ResponseEntity(pnfe.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }
